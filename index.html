@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DSB-26 Group 15 | Esocidae Phylogenetic Analysis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0a0d14;--bg2:#10141f;--bg3:#161b2c;
+    --card:#1a2035;--card2:#1f273d;
+    --accent:#4f8ef7;--accent2:#7c3aed;--accent3:#10b981;--accent4:#f59e0b;--accent5:#ef4444;
+    --text:#e8eaf0;--text2:#9aa3b8;--text3:#5a6480;
+    --border:#2a3250;--border2:#3a4468;
+    --grad1:linear-gradient(135deg,#4f8ef7,#7c3aed);
+    --grad2:linear-gradient(135deg,#10b981,#4f8ef7);
+    --grad3:linear-gradient(135deg,#f59e0b,#ef4444);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,13,20,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;}
+  .nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .nav-logo{font-weight:800;font-size:1.1rem;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-links{display:flex;gap:1.5rem;list-style:none;}
+  .nav-links a{color:var(--text2);text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:var(--accent);}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,142,247,.15) 0%, transparent 70%), radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124,58,237,.1) 0%, transparent 60%);}
+  .hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle, rgba(79,142,247,.08) 0%, transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
+  .hero-content{position:relative;max-width:900px;}
+  .badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.3);color:var(--accent);padding:.4rem 1.1rem;border-radius:999px;font-size:.8rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2rem;}
+  .badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.4s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  h1{font-size:clamp(2.2rem,5vw,4rem);font-weight:800;line-height:1.15;margin-bottom:1.5rem;background:linear-gradient(135deg,#e8eaf0 30%,#4f8ef7 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero-sub{font-size:1.15rem;color:var(--text2);max-width:680px;margin:0 auto 2.5rem;}
+  .hero-tags{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;}
+  .tag{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:.35rem .9rem;border-radius:6px;font-size:.8rem;font-weight:500;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.5rem;margin-top:1rem;}
+  .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;transition:border-color .3s,transform .3s;}
+  .stat-box:hover{border-color:var(--accent);transform:translateY(-4px);}
+  .stat-val{font-size:2rem;font-weight:800;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .stat-lbl{font-size:.75rem;color:var(--text2);font-weight:500;margin-top:.25rem;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* SECTIONS */
+  section{padding:5rem 2rem;}
+  .container{max-width:1300px;margin:0 auto;}
+  .section-label{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem;}
+  .section-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;margin-bottom:.75rem;}
+  .section-sub{color:var(--text2);font-size:1rem;max-width:640px;margin-bottom:3rem;}
+  .sep{height:1px;background:var(--border);max-width:1300px;margin:0 auto;}
+
+  /* CARDS */
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:border-color .3s,transform .3s,box-shadow .3s;}
+  .card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem;}
+  .card h3{font-size:1.05rem;font-weight:700;margin-bottom:.6rem;}
+  .card p{color:var(--text2);font-size:.9rem;line-height:1.7;}
+
+  /* TEAM */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;}
+  .team-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;transition:all .3s;}
+  .team-card:hover{border-color:var(--accent);transform:translateY(-4px);}
+  .avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:#fff;}
+  .team-name{font-weight:700;font-size:.95rem;margin-bottom:.3rem;}
+  .team-role{font-size:.8rem;color:var(--text2);}
+  .team-tasks{margin-top:.75rem;display:flex;flex-direction:column;gap:.35rem;}
+  .team-task{background:var(--bg3);border-radius:6px;padding:.25rem .6rem;font-size:.73rem;color:var(--text2);}
+
+  /* SPECIES TABLE */
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  thead{background:var(--bg3);}
+  th{padding:1rem 1.25rem;text-align:left;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);}
+  td{padding:.9rem 1.25rem;font-size:.88rem;border-top:1px solid var(--border);}
+  tr:hover td{background:rgba(79,142,247,.04);}
+  .species-name{font-style:italic;font-weight:600;color:var(--text);}
+  .accession{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);background:rgba(79,142,247,.1);padding:.2rem .5rem;border-radius:4px;}
+  .badge-sm{padding:.2rem .55rem;border-radius:999px;font-size:.72rem;font-weight:600;}
+  .badge-esox{background:rgba(79,142,247,.15);color:var(--accent);}
+  .badge-out{background:rgba(16,185,129,.15);color:var(--accent3);}
+
+  /* DISTANCE MATRIX */
+  .matrix-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;font-size:.72rem;font-family:'JetBrains Mono',monospace;}
+  .matrix-cell{padding:.5rem .3rem;border-radius:4px;text-align:center;font-weight:500;}
+  .mc-head{background:var(--bg3);color:var(--text2);font-size:.65rem;font-style:italic;}
+  .mc-zero{background:rgba(79,142,247,.08);color:var(--text3);}
+  .mc-low{background:rgba(16,185,129,.2);color:#6ee7b7;}
+  .mc-mid{background:rgba(245,158,11,.18);color:#fcd34d;}
+  .mc-high{background:rgba(239,68,68,.22);color:#fca5a5;}
+
+  /* WORKFLOW */
+  .flow{display:flex;flex-direction:column;gap:0;}
+  .flow-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem 0;border-left:2px solid var(--border);margin-left:22px;padding-left:2rem;position:relative;}
+  .flow-item:last-child{border-left:2px solid transparent;}
+  .flow-dot{position:absolute;left:-11px;top:1.5rem;width:20px;height:20px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:var(--accent);}
+  .flow-body h4{font-size:1rem;font-weight:700;margin-bottom:.4rem;}
+  .flow-body p{font-size:.88rem;color:var(--text2);}
+
+  /* CODE BLOCK */
+  .code-block{background:#0d1117;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .code-header{background:var(--bg3);padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--border);}
+  .code-dot{width:10px;height:10px;border-radius:50%;}
+  .code-title{font-size:.8rem;color:var(--text2);margin-left:auto;}
+  pre{padding:1.5rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.8;color:#e6edf3;}
+  .kw{color:#ff7b72;}.fn{color:#d2a8ff;}.cm{color:#8b949e;}.str{color:#a5d6ff;}.num{color:#79c0ff;}
+
+  /* RESULTS */
+  .result-highlight{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(79,142,247,.08));border:1px solid rgba(16,185,129,.3);border-radius:14px;padding:1.75rem 2rem;margin-bottom:1.5rem;}
+  .result-highlight h4{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;color:var(--accent3);}
+  .result-highlight p{color:var(--text2);font-size:.9rem;}
+
+  /* NEWICK */
+  .newick-box{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#79c0ff;line-height:1.9;overflow-x:auto;word-break:break-all;}
+
+  /* FOOTER */
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;}
+  .footer-logo{font-weight:800;font-size:1.2rem;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem;}
+  footer p{color:var(--text3);font-size:.85rem;}
+  .links-row{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;}
+  .links-row a{color:var(--accent);font-size:.85rem;text-decoration:none;font-weight:500;}
+  .links-row a:hover{text-decoration:underline;}
+
+  /* HIGHLIGHT BOXES */
+  .info-box{border-left:3px solid var(--accent);background:rgba(79,142,247,.07);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:.75rem 0;font-size:.9rem;color:var(--text2);}
+  .warn-box{border-left:3px solid var(--accent4);background:rgba(245,158,11,.07);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:.75rem 0;font-size:.9rem;color:var(--text2);}
+  .success-box{border-left:3px solid var(--accent3);background:rgba(16,185,129,.07);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:.75rem 0;font-size:.9rem;color:var(--text2);}
+
+  /* PILL TAGS */
+  .pill{display:inline-block;padding:.25rem .7rem;border-radius:999px;font-size:.75rem;font-weight:600;margin:.2rem;}
+  .pill-blue{background:rgba(79,142,247,.15);color:var(--accent);}
+  .pill-green{background:rgba(16,185,129,.15);color:var(--accent3);}
+  .pill-purple{background:rgba(124,58,237,.15);color:#c4b5fd;}
+  .pill-amber{background:rgba(245,158,11,.15);color:var(--accent4);}
+
+  /* ANIMATE */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp .7s ease forwards;}
+  .delay-1{animation-delay:.1s;opacity:0;}
+  .delay-2{animation-delay:.2s;opacity:0;}
+  .delay-3{animation-delay:.3s;opacity:0;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DSB-26 · Group 15</span>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#species">Species</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#code">Code</a></li>
+      <li><a href="#interpretation">Interpretation</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content fade-up">
+    <div class="badge"><span class="badge-dot"></span>DSB-26 · Group 15 · Academic Project</div>
+    <h1>Phylogenetic Analysis of Esocidae</h1>
+    <p class="hero-sub">A comprehensive bioinformatics study reconstructing evolutionary relationships within the Pike fish family using whole mitochondrial genomes, maximum-likelihood methods, and statistical validation.</p>
+    <div class="hero-tags">
+      <span class="tag">🧬 Mitochondrial Genomics</span>
+      <span class="tag">🌳 Maximum Likelihood</span>
+      <span class="tag">📊 Bootstrapping</span>
+      <span class="tag">🐟 Esocidae</span>
+      <span class="tag">🔬 MAFFT Alignment</span>
+      <span class="tag">💻 MEGA 12</span>
+      <span class="tag">📈 R Visualization</span>
+      <span class="tag">📐 ANOVA &amp; Tukey HSD</span>
+    </div>
+    <div class="stat-row delay-1">
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">Species Analyzed</div></div>
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">Esox Species</div></div>
+      <div class="stat-box"><div class="stat-val">2</div><div class="stat-lbl">Outgroup Species</div></div>
+      <div class="stat-box"><div class="stat-val">~16kb</div><div class="stat-lbl">Genome Size</div></div>
+      <div class="stat-box"><div class="stat-val">MEGA12</div><div class="stat-lbl">Analysis Tool</div></div>
+      <div class="stat-box"><div class="stat-val">371</div><div class="stat-lbl">Lines of R Code</div></div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="section-label">Contributors</div>
+    <div class="section-title">Project Team</div>
+    <p class="section-sub">Six members, each assigned specific responsibilities spanning data collection, analysis, visualization, research and presentation.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed);">S</div>
+        <div class="team-name">Shashi</div>
+        <div class="team-role">Team Lead &amp; Introduction</div>
+        <div class="team-tasks">
+          <div class="team-task">🎯 Delegated leadership tasks</div>
+          <div class="team-task">✍️ Introduction section</div>
+          <div class="team-task">🐟 Esocidae family background</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#10b981,#4f8ef7);">D</div>
+        <div class="team-name">Danish</div>
+        <div class="team-role">Methods &amp; Visualization</div>
+        <div class="team-tasks">
+          <div class="team-task">📋 Methods co-author</div>
+          <div class="team-task">🖼️ Visual resources research</div>
+          <div class="team-task">🌐 Website &amp; GitHub</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">M</div>
+        <div class="team-name">Muhammad</div>
+        <div class="team-role">Data &amp; Alignment</div>
+        <div class="team-tasks">
+          <div class="team-task">🔍 Genome data collection</div>
+          <div class="team-task">🧬 MAFFT alignment</div>
+          <div class="team-task">📋 Methods co-author</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#7c3aed,#ef4444);">J</div>
+        <div class="team-name">Jignesh</div>
+        <div class="team-role">Results &amp; Statistics</div>
+        <div class="team-tasks">
+          <div class="team-task">📊 Tree visualization</div>
+          <div class="team-task">📐 Statistical comparison</div>
+          <div class="team-task">📉 Pairwise distances</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#10b981,#7c3aed);">G</div>
+        <div class="team-name">Gabriel</div>
+        <div class="team-role">Methodology &amp; Interpretation</div>
+        <div class="team-tasks">
+          <div class="team-task">🌳 Phylogenetic reconstruction</div>
+          <div class="team-task">🔬 MEGA12 implementation</div>
+          <div class="team-task">💡 Evolutionary interpretation</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:linear-gradient(135deg,#4f8ef7,#10b981);">N</div>
+        <div class="team-name">Niamh</div>
+        <div class="team-role">Research &amp; Presentation</div>
+        <div class="team-tasks">
+          <div class="team-task">📚 Methods of phylogenetics</div>
+          <div class="team-task">🖥️ Presentation creation</div>
+          <div class="team-task">💡 Interpretation co-author</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- SPECIES -->
+<section id="species">
+  <div class="container">
+    <div class="section-label">Dataset</div>
+    <div class="section-title">Species &amp; Genomic Data</div>
+    <p class="section-sub">Seven species from the Esocidae family were selected — five Esox (ingroup) and two outgroups (Novumbra and Dallia) — using complete mitochondrial genomes from NCBI.</p>
+
+    <div class="table-wrap" style="margin-bottom:2rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Species</th>
+            <th>Common Name</th>
+            <th>Accession</th>
+            <th>Group</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="species-name">Esox masquinongy</td>
+            <td>Muskellunge</td>
+            <td><span class="accession">NC_054291.1</span></td>
+            <td><span class="badge-sm badge-esox">Esox</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="species-name">Esox americanus americanus</td>
+            <td>Eastern Redfin Pickerel</td>
+            <td><span class="accession">MT667252.1</span></td>
+            <td><span class="badge-sm badge-esox">Esox</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="species-name">Esox niger</td>
+            <td>Chain Pickerel</td>
+            <td><span class="accession">NC_054289.1</span></td>
+            <td><span class="badge-sm badge-esox">Esox</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="species-name">Esox lucius</td>
+            <td>Northern Pike</td>
+            <td><span class="accession">AP004103.1</span></td>
+            <td><span class="badge-sm badge-esox">Esox</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="species-name">Esox reichertii</td>
+            <td>Amur Pike</td>
+            <td><span class="accession">NC_023269.1</span></td>
+            <td><span class="badge-sm badge-esox">Esox</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="species-name">Novumbra hubbsi</td>
+            <td>Olympic Mudminnow</td>
+            <td><span class="accession">AP013047.1</span></td>
+            <td><span class="badge-sm badge-out">Outgroup</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="species-name">Dallia pectoralis</td>
+            <td>Alaska Blackfish</td>
+            <td><span class="accession">28804856</span></td>
+            <td><span class="badge-sm badge-out">Outgroup</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box">
+      <strong>Search Strategy:</strong> NCBI nucleotide database was searched using terms like "Esox complete mitochondrial genome". For Esox lucius and Esox reichertii, the first complete genome results were used. Searches were also filtered by bp length to confirm completeness. Genomes were discovered via <strong>OneZoom</strong> family browser and NCBI Nucleotide.
+    </div>
+
+    <div class="warn-box">
+      <strong>Missing species:</strong> <em>Esox cisalpinus</em> was searched but no complete mitochondrial genome was found on NCBI. Results were ordered by bp length to confirm absence. This is documented in <code>Species.txt</code>.
+    </div>
+
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,142,247,.15);">🧬</div>
+        <h3>Why Mitochondrial DNA?</h3>
+        <p>mtDNA has a high mutation rate, a small genome (~16 kb), and maternal inheritance — making it ideal and widely standardized for phylogenetic studies. These properties enable clear differentiation between related species without recombination noise.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,.15);">🎯</div>
+        <h3>Why These 7 Species?</h3>
+        <p>All Esocidae species with available complete mitochondrial genomes were selected. Dallia and Novumbra serve as outgroups to root the tree, representing the broader order Esociformes but sister to the Esox genus.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- METHODOLOGY -->
+<section id="methodology">
+  <div class="container">
+    <div class="section-label">Workflow</div>
+    <div class="section-title">Methodology</div>
+    <p class="section-sub">A rigorous bioinformatics pipeline was followed — from raw genome data through alignment, model selection, tree construction, bootstrapping and statistical validation.</p>
+
+    <div class="grid-2" style="margin-bottom:3rem;">
+      <div>
+        <div class="flow">
+          <div class="flow-item">
+            <div class="flow-dot">1</div>
+            <div class="flow-body">
+              <h4>Genome Data Collection (Muhammad)</h4>
+              <p>Full mitochondrial genome sequences (FASTA format) were searched on <strong>NCBI Nucleotide</strong> for each Esocidae species. First complete-genome results were selected and concatenated into a single multi-FASTA file.</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot">2</div>
+            <div class="flow-body">
+              <h4>Multiple Sequence Alignment — MAFFT</h4>
+              <p>All sequences uploaded to <strong>MAFFT online server</strong> with default settings. Only the uppercase/lowercase option was changed to "same as input". Output copied into <code>aligned.fasta</code> (123 KB aligned vs 121 KB unaligned).</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot">3</div>
+            <div class="flow-body">
+              <h4>Tree Construction — MEGA 12</h4>
+              <p>Maximum-likelihood tree built using MEGA12's Phylogeny module. Sequence registered as <strong>nucleotide (non protein-coding)</strong> since full mitochondrial genome contains non-coding regions.</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot">4</div>
+            <div class="flow-body">
+              <h4>Model &amp; Parameter Selection</h4>
+              <p>Substitution model selected: <strong>Gamma-distributed rates + Invariant sites (G+I)</strong>. This accounts for rapid mitochondrial mutation rates and high reproductive variation in fish populations. Bootstrapping enabled for statistical validation.</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot">5</div>
+            <div class="flow-body">
+              <h4>Visualization &amp; Export</h4>
+              <p>Two tree versions exported: one with <strong>bootstrap values</strong> and one with <strong>branch lengths</strong>. Final editing done in MSPaint. R code generated heatmap, GC-content plots, ANOVA boxplot, and distance CSV.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div class="card-icon" style="background:rgba(124,58,237,.15);">⚙️</div>
+          <h3>Why Maximum Likelihood?</h3>
+          <p style="margin-bottom:.8rem;">Compared to distance-based (UPGMA/NJ) and parsimony methods, Maximum Likelihood:</p>
+          <div class="pill pill-blue">Statistically most robust</div>
+          <div class="pill pill-blue">Handles unequal substitution rates</div>
+          <div class="pill pill-blue">Works well with 6–7 taxa</div>
+          <div class="pill pill-green">Widely accepted in literature</div>
+          <div class="pill pill-green">G+I model for mitochondrial DNA</div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:rgba(245,158,11,.15);">🔧</div>
+          <h3>Tools Used</h3>
+          <div style="margin-top:.5rem;">
+            <div class="pill pill-purple">MEGA 12</div>
+            <div class="pill pill-purple">MAFFT Online</div>
+            <div class="pill pill-purple">R (ape, seqinr, ggplot2)</div>
+            <div class="pill pill-amber">NCBI Nucleotide</div>
+            <div class="pill pill-amber">OneZoom Browser</div>
+            <div class="pill pill-amber">MSPaint (editing)</div>
+            <div class="pill pill-blue">GitHub</div>
+            <div class="pill pill-blue">Vercel (website)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Research Background</div>
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;">Phylogenetic Methods Comparison</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,142,247,.15);">📏</div>
+        <h3>Distance-Based (NJ/UPGMA)</h3>
+        <p>Computes pairwise distances and clusters by similarity. Fast but loses character-level information. Used here as a comparison baseline via pairwise distance heatmap.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,.15);">🔺</div>
+        <h3>Maximum Parsimony</h3>
+        <p>Selects the tree requiring fewest evolutionary changes. Computationally intensive for large datasets. Considered but not chosen — ML preferred for accuracy with whole mtDNA.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,.15);">✅</div>
+        <h3>Maximum Likelihood (Chosen)</h3>
+        <p>Selects the statistically most probable tree given a DNA mutation model. Character-based, handles rate variation, widely used. Combined with Gamma+I substitution model.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="container">
+    <div class="section-label">Findings</div>
+    <div class="section-title">Results &amp; Analysis</div>
+    <p class="section-sub">Key findings from the ML tree construction, pairwise genetic distance matrix, and R-based statistical analyses.</p>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="result-highlight">
+        <h4>🌳 Tree Topology</h4>
+        <p>The ML tree places <strong>E. americanus</strong> and <strong>E. niger</strong> as closest relatives (distance ≈ 0.0043), grouped with E. lucius and E. reichertii. E. masquinongy is a more distant Esox. Novumbra and Dallia form clear outgroups, with Dallia being the most distant (~0.197–0.201).</p>
+      </div>
+      <div class="result-highlight">
+        <h4>📐 Bootstrap Validation</h4>
+        <p>Bootstrapping was used to statistically validate phylogenetic groupings. High bootstrap values at key nodes indicate strong support for the recovered topology. Two tree images exported: one highlighting bootstrap values and one showing branch lengths for interpretation.</p>
+      </div>
+    </div>
+
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;">Pairwise Genetic Distance Matrix</div>
+    <div class="table-wrap" style="margin-bottom:2rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Species</th>
+            <th>E. masquinongy</th>
+            <th>E. americanus</th>
+            <th>E. lucius</th>
+            <th>E. reichertii</th>
+            <th>E. niger</th>
+            <th>N. hubbsi</th>
+            <th>D. pectoralis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="species-name">E. masquinongy</td><td>0.000</td><td>0.0767</td><td>0.1404</td><td>0.1548</td><td>0.1553</td><td>0.1730</td><td>0.1970</td></tr>
+          <tr><td class="species-name">E. americanus</td><td>0.0767</td><td>0.000</td><td>0.1395</td><td>0.1568</td><td>0.1568</td><td>0.1726</td><td>0.1978</td></tr>
+          <tr><td class="species-name">E. lucius</td><td>0.1404</td><td>0.1395</td><td>0.000</td><td>0.1543</td><td>0.1547</td><td>0.1712</td><td>0.1949</td></tr>
+          <tr><td class="species-name">E. reichertii</td><td>0.1548</td><td>0.1568</td><td>0.1543</td><td>0.000</td><td><strong style="color:#6ee7b7;">0.0086</strong></td><td>0.1771</td><td>0.2015</td></tr>
+          <tr><td class="species-name">E. niger</td><td>0.1553</td><td>0.1568</td><td>0.1547</td><td><strong style="color:#6ee7b7;">0.0086</strong></td><td>0.000</td><td>0.1771</td><td>0.2008</td></tr>
+          <tr><td class="species-name">N. hubbsi</td><td>0.1730</td><td>0.1726</td><td>0.1712</td><td>0.1771</td><td>0.1771</td><td>0.000</td><td>0.1999</td></tr>
+          <tr><td class="species-name">D. pectoralis</td><td>0.1970</td><td>0.1978</td><td>0.1949</td><td>0.2015</td><td>0.2008</td><td>0.1999</td><td>0.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div>
+        <div class="success-box">
+          <strong>Closest pair:</strong> <em>E. reichertii</em> &amp; <em>E. niger</em> — distance ≈ <strong>0.0086</strong>. This extremely low value suggests very recent divergence or close evolutionary kinship between the Amur Pike and Chain Pickerel.
+        </div>
+        <div class="warn-box">
+          <strong>Most distant pair:</strong> <em>E. reichertii</em> &amp; <em>D. pectoralis</em> — distance ≈ <strong>0.2015</strong>. Dallia is the most diverged, consistent with its role as an outgroup species (Alaska Blackfish).
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-icon" style="background:rgba(16,185,129,.15);">📊</div>
+          <h3>MAFFT Preliminary Tree (Newick)</h3>
+          <p style="margin-bottom:.75rem;font-size:.85rem;">Distance tree from MAFFT server using default parameters:</p>
+          <div class="newick-box">NC_054291.1:0.06995,<br>(<br>&nbsp;&nbsp;AP004103.1:0.03794,<br>&nbsp;&nbsp;NC_023269.1:0.03855):0.03365,<br>(<br>&nbsp;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;MT667252.1:0.00498,<br>&nbsp;&nbsp;&nbsp;&nbsp;NC_054289.1:0.00420):0.07668,<br>&nbsp;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;AP013047.1:0.08698,<br>&nbsp;&nbsp;&nbsp;&nbsp;AP004102.1:0.11359):0.00994<br>&nbsp;&nbsp;):0.00484);</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;">Statistical Tests — GC Content Analysis</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,142,247,.15);">📈</div>
+        <h3>Nucleotide Composition</h3>
+        <p>Stacked bar chart showing ATGC composition (%) per species. Mitochondrial genomes generally show AT-bias. Gaps from alignment were excluded before calculating percentages using seqinr in R.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,.15);">🧮</div>
+        <h3>One-Way ANOVA on GC%</h3>
+        <p>Each genome was split into 1000 bp windows to generate multiple GC% values per species. ANOVA tests whether species significantly differ in genome GC content — relevant to genome stability and evolutionary pressure.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,.15);">🔍</div>
+        <h3>Tukey's HSD Post-Hoc</h3>
+        <p>If ANOVA was significant (p &lt; 0.05), Tukey's HSD was applied to identify which specific species pairs differ significantly, providing pairwise statistical comparison of GC content across all 21 pairs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- CODE -->
+<section id="code">
+  <div class="container">
+    <div class="section-label">Implementation</div>
+    <div class="section-title">R Visualization Code</div>
+    <p class="section-sub">The visualization and statistical analysis were implemented in R using <code>ape</code>, <code>seqinr</code>, <code>ggplot2</code> and <code>reshape2</code> packages. The script produces 4 plots, a CSV, and ANOVA/Tukey output files.</p>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="card">
+        <h3>📦 R Packages Used</h3>
+        <div style="margin-top:.75rem;">
+          <div class="pill pill-blue">seqinr — FASTA reading</div>
+          <div class="pill pill-blue">ape — DNA distance calc</div>
+          <div class="pill pill-purple">ggplot2 — visualization</div>
+          <div class="pill pill-purple">reshape2 — data reshaping</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📁 Output Files</h3>
+        <div style="margin-top:.75rem;">
+          <div class="pill pill-green">nucleotide_composition.png</div>
+          <div class="pill pill-green">gc_content.png</div>
+          <div class="pill pill-green">pairwise_distances_heatmap.png</div>
+          <div class="pill pill-green">gc_content_anova_boxplot.png</div>
+          <div class="pill pill-amber">phylogenetic_distances.csv</div>
+          <div class="pill pill-amber">anova_results.txt</div>
+          <div class="pill pill-amber">tukey_posthoc_results.txt</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dot" style="background:#ef4444;"></div>
+        <div class="code-dot" style="background:#f59e0b;"></div>
+        <div class="code-dot" style="background:#10b981;"></div>
+        <span class="code-title">Code/visualization.R — Key Excerpt</span>
+      </div>
+<pre><span class="cm"># ── STEP 1: Load packages ──────────────────────────────────────────</span>
+<span class="fn">library</span>(seqinr)   <span class="cm"># FASTA reading</span>
+<span class="fn">library</span>(ape)      <span class="cm"># DNA analysis &amp; distance</span>
+<span class="fn">library</span>(ggplot2)  <span class="cm"># visualization</span>
+<span class="fn">library</span>(reshape2) <span class="cm"># data reshaping</span>
+
+<span class="cm"># ── STEP 2: Load aligned FASTA ─────────────────────────────────────</span>
+aligned_fasta <span class="kw">&lt;-</span> <span class="fn">read.dna</span>(<span class="str">"aligned_fasta.fasta"</span>, format = <span class="str">"fasta"</span>)
+sequences     <span class="kw">&lt;-</span> <span class="fn">read.fasta</span>(<span class="str">"aligned_fasta.fasta"</span>, seqtype = <span class="str">"DNA"</span>)
+
+<span class="cm"># ── Pairwise genetic distances (raw model) ─────────────────────────</span>
+pairwise_dists  <span class="kw">&lt;-</span> <span class="fn">dist.dna</span>(aligned_fasta, model = <span class="str">"raw"</span>)
+distance_matrix <span class="kw">&lt;-</span> <span class="fn">as.matrix</span>(pairwise_dists)
+<span class="fn">write.csv</span>(distance_matrix, <span class="str">"phylogenetic_distances.csv"</span>)
+
+<span class="cm"># ── ANOVA on GC Content (1000bp windows) ──────────────────────────</span>
+window_size  <span class="kw">&lt;-</span> <span class="num">1000</span>
+anova_result <span class="kw">&lt;-</span> <span class="fn">aov</span>(GC_Window <span class="kw">~</span> Species, data = window_gc)
+p_value      <span class="kw">&lt;-</span> <span class="fn">summary</span>(anova_result)[[<span class="num">1</span>]][[<span class="str">"Pr(&gt;F)"</span>]][<span class="num">1</span>]
+<span class="kw">if</span> (p_value <span class="kw">&lt;</span> <span class="num">0.05</span>) <span class="fn">TukeyHSD</span>(anova_result)</pre>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <div class="info-box">
+        <strong>Repository:</strong> <a href="https://github.com/iamdanish7/pike" style="color:var(--accent);">github.com/iamdanish7/pike</a> &nbsp;|&nbsp;
+        <strong>Live Website:</strong> <a href="https://pike1.vercel.app" style="color:var(--accent);">pike1.vercel.app</a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- INTERPRETATION -->
+<section id="interpretation">
+  <div class="container">
+    <div class="section-label">Discussion</div>
+    <div class="section-title">Interpretation &amp; Conclusions</div>
+    <p class="section-sub">Evolutionary insights drawn from the phylogenetic tree, distance matrix, and genomic analysis — interpreted in the context of known Esocidae biology.</p>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,142,247,.15);">🐟</div>
+        <h3>Evolutionary Relationships</h3>
+        <p>The ML tree confirms <strong>E. americanus</strong> and <strong>E. niger</strong> as sister taxa (distance 0.0086), suggesting they shared a common ancestor most recently. <strong>E. lucius</strong> and <strong>E. reichertii</strong> also cluster, while <strong>E. masquinongy</strong> (Muskellunge) is more diverged within Esox. Dallia is the deepest outgroup.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,.15);">🌍</div>
+        <h3>Habitat &amp; Geographic Context</h3>
+        <p>Northern Pike (<em>E. lucius</em>) and Amur Pike (<em>E. reichertii</em>) have a broad Holarctic distribution across North America, Europe and Asia — consistent with their phylogenetic proximity. E. americanus is eastern North America, while E. niger is widespread across eastern US, reducing overlap-based divergence pressure.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,.15);">⏱️</div>
+        <h3>Divergence Time Considerations</h3>
+        <p>Fish have high reproductive rates and relatively short generation times, increasing genetic drift. Mitochondrial genomes accumulate mutations faster than nuclear DNA, making them sensitive markers for divergence even over moderate evolutionary timescales.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(124,58,237,.15);">🔮</div>
+        <h3>Comparison: ML vs Distance Tree</h3>
+        <p>Pairwise distances show similar groupings to the ML tree but lack statistical model-based support. Distance-based trees (NJ) would use uniform substitution rates and miss rate variation captured by the Gamma+I model — potentially distorting deeper nodes.</p>
+      </div>
+    </div>
+
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;">Further Research Directions</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,142,247,.1);">🧬</div>
+        <h3>Nuclear Genome Comparison</h3>
+        <p>Compare mtDNA-based topology with nuclear genome phylogenies to resolve any discordance due to incomplete lineage sorting or mitochondrial introgression.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,.1);">🌿</div>
+        <h3>Ecological Trait Mapping</h3>
+        <p>Map ecological traits (habitat type, depth preference, prey) onto the phylogeny to test for niche conservatism versus adaptive divergence across the Esocidae lineage.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,.1);">➕</div>
+        <h3>Outgroup Expansion</h3>
+        <p>Add additional outgroup species (e.g. from Salmoniformes or Umbridae) and include <em>Esox cisalpinus</em> if genome becomes available to improve tree rooting and species coverage.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="section-label">Presentation Insights</div>
+      <div style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Key Points for Academic Presentation</div>
+      <div class="grid-2">
+        <div>
+          <div class="info-box">Use the aligned FASTA file to visually demonstrate <strong>mutations and gaps</strong> (InDels, frameshifts) — these are biologically meaningful artifacts of genome evolution.</div>
+          <div class="info-box">Explain <strong>why mtDNA</strong>: high mutation rate, 16kb genome, maternal inheritance, no recombination, widely standardized in fish phylogenetics literature.</div>
+          <div class="info-box">Show <strong>workflow diagram</strong> (NCBI → FASTA → MAFFT → MEGA12 → R analysis) to make the pipeline clear for the audience.</div>
+        </div>
+        <div>
+          <div class="warn-box">Highlight the <strong>conserved mitochondrial regions</strong> visible in the alignment — these represent functionally constrained genes (e.g. cytochrome b, ribosomal RNA) shared across all Esocidae.</div>
+          <div class="warn-box">Explicitly compare the <strong>ML tree with the MAFFT distance tree</strong> to demonstrate how method choice affects topology, particularly at deeper nodes.</div>
+          <div class="success-box">Future direction: mention potential for <strong>isotope analysis or fossil calibration</strong> to assign absolute divergence dates to the tree nodes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sep"></div>
+
+<!-- FILE STRUCTURE -->
+<section>
+  <div class="container">
+    <div class="section-label">Repository</div>
+    <div class="section-title">Project File Structure</div>
+    <p class="section-sub">Complete directory layout of the DSB-26 Group 15 repository.</p>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dot" style="background:#ef4444;"></div>
+        <div class="code-dot" style="background:#f59e0b;"></div>
+        <div class="code-dot" style="background:#10b981;"></div>
+        <span class="code-title">DSB-26-Group15-main/</span>
+      </div>
+<pre><span class="fn">DSB-26-Group15-main/</span>
+├── <span class="str">0verview.txt</span>                   <span class="cm"># Report structure &amp; section assignments</span>
+├── <span class="str">Methodology_detail.txt</span>        <span class="cm"># Full methodology explanation</span>
+├── <span class="str">webpage.txt</span>                    <span class="cm"># GitHub &amp; Vercel website links</span>
+├── <span class="str">README.md</span>                      <span class="cm"># Project identifier</span>
+│
+├── <span class="fn">Code/</span>
+│   └── <span class="str">visualization.R</span>           <span class="cm"># 371-line R script for analysis &amp; plots</span>
+│
+├── <span class="fn">Data/</span>
+│   ├── <span class="str">Species.txt</span>              <span class="cm"># Species list with NCBI accessions &amp; search strategy</span>
+│   ├── <span class="str">aligned.fasta</span>            <span class="cm"># MAFFT-aligned sequences (123 KB)</span>
+│   └── <span class="str">unaligned.fasta</span>          <span class="cm"># Raw concatenated sequences (121 KB)</span>
+│
+├── <span class="fn">Figures/</span>
+│   ├── <span class="str">phylogenetic_distances.csv</span>     <span class="cm"># 7×7 pairwise distance matrix</span>
+│   ├── <span class="str">pairwise_distances_heatmap_abbreviated.png</span>
+│   ├── <span class="str">tree_final_bootstrapvals.png</span>
+│   └── <span class="str">tree_final_dist.png</span>
+│
+└── <span class="fn">Various/</span>
+    ├── <span class="str">Tasks.txt</span>                <span class="cm"># Individual role assignments</span>
+    ├── <span class="str">Results.txt</span>              <span class="cm"># MAFFT Newick output tree</span>
+    ├── <span class="str">danish-visual.txt</span>        <span class="cm"># Visual reference links (YouTube, Bing)</span>
+    ├── <span class="str">Ideas for presentation</span>   <span class="cm"># Presentation content suggestions</span>
+    └── <span class="str">Niamh - Methods of Phylogenetic Analysis</span>   <span class="cm"># Research notes</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DSB-26 · Group 15</div>
+  <p>Esocidae Phylogenetic Analysis · Bioinformatics Project · 2026</p>
+  <p style="margin-top:.5rem;">Members: Shashi · Danish · Muhammad · Jignesh · Gabriel · Niamh</p>
+  <div class="links-row">
+    <a href="https://github.com/iamdanish7/pike">GitHub Repository</a>
+    <a href="https://pike1.vercel.app">Live Website</a>
+    <a href="https://mafft.cbrc.jp/alignment/server/">MAFFT Server</a>
+    <a href="https://www.ncbi.nlm.nih.gov/nuccore/">NCBI Nucleotide</a>
+  </div>
+  <p style="margin-top:1.5rem;color:var(--text3);font-size:.78rem;">Generated Documentation · DSB-26-Group15 · All project data aggregated from project text files</p>
+</footer>
+
+</body>
+</html>
