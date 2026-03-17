@@ -182,7 +182,6 @@
       <span class="tag">🔬 MAFFT Alignment</span>
       <span class="tag">💻 MEGA 12</span>
       <span class="tag">📈 R Visualization</span>
-      <span class="tag">📐 ANOVA &amp; Tukey HSD</span>
     </div>
     <div class="stat-row delay-1">
       <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">Species Analyzed</div></div>
@@ -404,7 +403,7 @@
             <div class="flow-dot">5</div>
             <div class="flow-body">
               <h4>Visualization &amp; Export</h4>
-              <p>Two tree versions exported: one with <strong>bootstrap values</strong> and one with <strong>branch lengths</strong>. Final editing done in MSPaint. R code generated heatmap, GC-content plots, ANOVA boxplot, and distance CSV.</p>
+              <p>Two tree versions exported: one with <strong>bootstrap values</strong> and one with <strong>branch lengths</strong>. Final editing done in MSPaint. R code generated heatmap, GC-content plots,and distance CSV.</p>
             </div>
           </div>
         </div>
@@ -566,13 +565,8 @@
       <div class="card">
         <h3>📁 Output Files</h3>
         <div style="margin-top:.75rem;">
-          <div class="pill pill-green">nucleotide_composition.png</div>
-          <div class="pill pill-green">gc_content.png</div>
           <div class="pill pill-green">pairwise_distances_heatmap.png</div>
-          <div class="pill pill-green">gc_content_anova_boxplot.png</div>
           <div class="pill pill-amber">phylogenetic_distances.csv</div>
-          <div class="pill pill-amber">anova_results.txt</div>
-          <div class="pill pill-amber">tukey_posthoc_results.txt</div>
         </div>
       </div>
     </div>
@@ -598,12 +592,6 @@ sequences     <span class="kw">&lt;-</span> <span class="fn">read.fasta</span>(<
 pairwise_dists  <span class="kw">&lt;-</span> <span class="fn">dist.dna</span>(aligned_fasta, model = <span class="str">"raw"</span>)
 distance_matrix <span class="kw">&lt;-</span> <span class="fn">as.matrix</span>(pairwise_dists)
 <span class="fn">write.csv</span>(distance_matrix, <span class="str">"phylogenetic_distances.csv"</span>)
-
-<span class="cm"># ── ANOVA on GC Content (1000bp windows) ──────────────────────────</span>
-window_size  <span class="kw">&lt;-</span> <span class="num">1000</span>
-anova_result <span class="kw">&lt;-</span> <span class="fn">aov</span>(GC_Window <span class="kw">~</span> Species, data = window_gc)
-p_value      <span class="kw">&lt;-</span> <span class="fn">summary</span>(anova_result)[[<span class="num">1</span>]][[<span class="str">"Pr(&gt;F)"</span>]][<span class="num">1</span>]
-<span class="kw">if</span> (p_value <span class="kw">&lt;</span> <span class="num">0.05</span>) <span class="fn">TukeyHSD</span>(anova_result)</pre>
     </div>
 
     <div style="margin-top:2rem;">
